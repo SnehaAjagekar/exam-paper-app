@@ -7,7 +7,7 @@ import LoginAsPage from "./components/LoginAsPage";
 function App() {
   return (
     <div>
-      <LoginAsPage />
+      <Register />
     </div>
   );
 }

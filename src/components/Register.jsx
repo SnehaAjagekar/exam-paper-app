@@ -56,7 +56,6 @@ const Register = () => {
       <h2 className="text-center">Sign In</h2>
       {message && <div className="alert alert-info">{message}</div>}
       <form onSubmit={handleSubmit} className="p-3 border rounded shadow">
-        
         <div className="mb-3">
           <label className="form-label">College Name</label>
           <input
@@ -68,7 +67,6 @@ const Register = () => {
             required
           />
         </div>
-
         <div className="mb-3">
           <label className="form-label">Full Name</label>
           <input
@@ -80,7 +78,6 @@ const Register = () => {
             required
           />
         </div>
-
         <div className="mb-3">
           <label className="form-label">Role</label>
           <select
@@ -94,7 +91,6 @@ const Register = () => {
             <option value="receiver">Receiver</option>
           </select>
         </div>
-
         <div className="mb-3">
           <label className="form-label">Distributor/Receiver ID</label>
           <input
@@ -106,7 +102,6 @@ const Register = () => {
             required
           />
         </div>
-
         <div className="mb-3">
           <label className="form-label">Phone Number</label>
           <input
@@ -118,7 +113,6 @@ const Register = () => {
             required
           />
         </div>
-
         <div className="mb-3">
           <label className="form-label">Email</label>
           <input
@@ -130,7 +124,6 @@ const Register = () => {
             required
           />
         </div>
-
         <div className="mb-3">
           <label className="form-label">Username</label>
           <input
@@ -142,7 +135,6 @@ const Register = () => {
             required
           />
         </div>
-
         <div className="mb-3">
           <label className="form-label">Password</label>
           <input
@@ -154,7 +146,6 @@ const Register = () => {
             required
           />
         </div>
-
         <button type="submit" className="btn btn-primary w-100">
           Sign In
         </button>
