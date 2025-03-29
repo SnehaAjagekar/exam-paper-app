@@ -1,23 +1,30 @@
+import { Outlet, useNavigate } from "react-router-dom";
+
 export default function MainPage() {
-    return (
-      <div
-        className="d-flex flex-column align-items-center justify-content-center vh-100 text-white"
-        style={{
-          backgroundImage: "url('/WhatsApp Image 2025-03-18 at 12.36.16.jpeg')", 
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          width: "100%",
-          height: "100vh",
-        }}
-      >
-        <h1 className="mb-4">Welcome to Our Platform</h1>
-        <p className="text-light">Please sign in or log in to continue</p>
-        <div className="d-flex gap-3 mt-3">
-          <button className="btn btn-primary">Sign In</button>
-          <button className="btn btn-outline-light">Login</button>
+  const navigate = useNavigate();
+
+  return (
+    <div>
+      {/* Navbar */}
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-4">
+        <a className="navbar-brand" href="#" >VIT</a>
+        <div className="ms-auto">
+          <button className="btn btn-light me-2" onClick={() => navigate("/")}>
+            Home
+          </button>
+          <button className="btn btn-primary me-2" onClick={() => navigate("/register")}>
+            Sign In
+          </button>
+          <button className="btn btn-outline-light" onClick={() => navigate("/loginAs")}>
+            Login
+          </button>
         </div>
+      </nav>
+
+      {/* Dynamic Content */}
+      <div className="container mt-5">
+        <Outlet />
       </div>
-    );
-  }
-  
+    </div>
+  );
+}

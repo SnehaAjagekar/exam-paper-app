@@ -1,43 +1,97 @@
-import { useState } from "react";
-import { FaSignOutAlt, FaEye } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function ReceiverPage() {
-  const [subject, setSubject] = useState("Mathematics"); // Example subject
+  const navigate = useNavigate();
+  const [examPapers, setExamPapers] = useState([]);
+  const [message, setMessage] = useState("Loading...");
+  
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      navigate("/login");
+      return;
+    }
 
-  const handleViewSet = (setName) => {
-    alert(`Viewing ${setName}`); // Replace this with actual file viewing logic
-  };
+    // Decode JWT to extract receiverId (backend should send it in payload)
+    const decodedToken = JSON.parse(atob(token.split(".")[1]));
+    const receiverId = decodedToken.receiverId; // 🔥 Backend should send receiverId in JWT payload
+
+    axios
+      .get(`http://127.0.0.1:5000/get-exams?receiverId=${receiverId}`, {
+        headers: { Authorization: `Bearer ${token}` }, // Attach JWT token
+      })
+      .then((response) => {
+        if (response.data.length === 0) {
+          setMessage("No exam papers assigned yet.");
+        } else {
+          setExamPapers(response.data);
+        }
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 401) {
+          setMessage("Unauthorized! Please log in again.");
+          localStorage.removeItem("access_token");
+          navigate("/login");
+        } else {
+          setMessage("Failed to fetch exam papers. Try again later.");
+        }
+      });
+  }, [navigate]);
 
   return (
-    <div className="container d-flex flex-column align-items-center vh-100">
-      <div className="card shadow-lg p-4 mt-4 w-50 text-center">
-        {/* Header with Logout */}
-        <div className="d-flex justify-content-between align-items-center">
-          <h3 className="fw-bold">Receiver</h3>
-          <button className="btn btn-danger d-flex align-items-center">
-            <FaSignOutAlt className="me-2" /> Logout
-          </button>
-        </div>
+    <div className="container mt-4">
+      <h2>Receiver Dashboard</h2>
 
-        {/* Subject Name Display */}
-        <div className="mt-3">
-          <h5 className="fw-bold">Subject: {subject}</h5>
-        </div>
-
-        {/* View Set Buttons */}
-        <div className="mt-4">
-          {["Set A", "Set B", "Set C"].map((setName, index) => (
-            <button
-              key={index}
-              className="btn btn-primary w-100 my-2 d-flex align-items-center justify-content-center"
-              onClick={() => handleViewSet(setName)}
-            >
-              <FaEye className="me-2" /> View {setName}
-            </button>
-          ))}
-        </div>
-      </div>
+      {examPapers.length === 0 ? (
+        <div className="alert alert-info mt-3">{message}</div>
+      ) : (
+        <table className="table table-bordered mt-3">
+          <thead>
+            <tr>
+              <th>Subject</th>
+              <th>Set A</th>
+              <th>Set B</th>
+              <th>Set C</th>
+            </tr>
+          </thead>
+          <tbody>
+            {examPapers.map((exam, index) => (
+              <tr key={index}>
+                <td>{exam.subject}</td>
+                <td>
+                  {exam.setA ? (
+                    <a href={exam.setA} download className="btn btn-success">
+                      Download
+                    </a>
+                  ) : (
+                    "Not Available"
+                  )}
+                </td>
+                <td>
+                  {exam.setB ? (
+                    <a href={exam.setB} download className="btn btn-success">
+                      Download
+                    </a>
+                  ) : (
+                    "Not Available"
+                  )}
+                </td>
+                <td>
+                  {exam.setC ? (
+                    <a href={exam.setC} download className="btn btn-success">
+                      Download
+                    </a>
+                  ) : (
+                    "Not Available"
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }
-
