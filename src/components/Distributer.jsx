@@ -1,10 +1,9 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // For logout redirection
+import { useNavigate } from "react-router-dom";
 
 export default function DistributorPage() {
   const navigate = useNavigate();
-  const [subject, setSubject] = useState("");
   const [receiverId, setReceiverId] = useState("");
   const [receiverName, setReceiverName] = useState("");
   const [files, setFiles] = useState({ setA: null, setB: null, setC: null });
@@ -18,13 +17,13 @@ export default function DistributorPage() {
   };
 
   const handleUpload = async () => {
-    if (!subject || !receiverId || !receiverName) {
+    if (!receiverId || !receiverName) {
       setMessage("Please enter all details!");
       return;
     }
 
     const token = localStorage.getItem("access_token");
-    console.log("Token:", token);// Get JWT token
+    console.log("Token:", token);
     if (!token) {
       setMessage("Unauthorized! Please log in.");
       return;
@@ -33,7 +32,7 @@ export default function DistributorPage() {
     const formData = new FormData();
     formData.append("receiverId", receiverId);
     formData.append("receiverName", receiverName);
-    formData.append("subject", subject);
+
     if (files.setA) formData.append("setA", files.setA);
     if (files.setB) formData.append("setB", files.setB);
     if (files.setC) formData.append("setC", files.setC);
@@ -41,25 +40,24 @@ export default function DistributorPage() {
     try {
       const response = await axios.post("http://127.0.0.1:5000/upload-exam", formData, {
         headers: {
-          "Content-Type": "multipart/form-data",
-          "Authorization": `Bearer ${token}`, // Add JWT token
+          "Authorization": `Bearer ${token}`,
         },
       });
       setMessage(response.data.message || "Exam papers uploaded successfully!");
     } catch (error) {
       if (error.response && error.response.status === 401) {
         setMessage("Unauthorized! Please log in again.");
-        localStorage.removeItem("access_token"); // Clear token on failure
-        navigate("/login"); // Redirect to login page
+        localStorage.removeItem("access_token");
+        navigate("/login");
       } else {
-        setMessage("Upload failed! Try again.");
+        setMessage(error.response?.data?.message || "Upload failed! Try again.");
       }
     }
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("access_token"); // Clear token
-    navigate("/login"); // Redirect to login
+    localStorage.removeItem("access_token");
+    navigate("/login");
   };
 
   return (
@@ -95,19 +93,8 @@ export default function DistributorPage() {
         />
       </div>
 
-      <div className="mt-3">
-        <label className="form-label fw-bold">Subject Name:</label>
-        <input
-          type="text"
-          className="form-control"
-          value={subject}
-          onChange={(e) => setSubject(e.target.value)}
-          placeholder="Enter Subject"
-        />
-      </div>
-
       <div className="mt-4">
-        {["setA", "setB", "setC"].map((setName, index) => (
+        {"setA setB setC".split(" ").map((setName, index) => (
           <div key={index} className="mb-3">
             <label className="fw-bold">Upload {setName}:</label>
             <input

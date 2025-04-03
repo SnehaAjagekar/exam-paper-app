@@ -20,7 +20,7 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="loginAs" element={<LoginAsPage />} />
           <Route path="distributor" element={<DistributorPage />} />
-          <Route path="Receiver" element={<ReceiverPage />} />
+          <Route path="receiver" element={<ReceiverPage />} />
 
           
 

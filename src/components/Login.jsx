@@ -6,15 +6,15 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  
+
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const role = searchParams.get("role");  // URL se role le raha hai
+  const role = searchParams.get("role");
 
   useEffect(() => {
     if (!role) {
-      navigate("/login-as"); // Agar role select nahi kiya toh "Login As" page pe bhej do
+      navigate("/loginAs");
     }
   }, [role, navigate]);
 
@@ -23,22 +23,28 @@ export default function Login() {
     setMessage("");
 
     try {
-      const response = await axios.post("http://127.0.0.1:5000/login", { username, password });
+      const response = await axios.post("http://127.0.0.1:5000/login", {
+        username,
+        password,
+      });
 
-      // Save token in localStorage
-      localStorage.setItem("token", response.data.access_token);
-      
+      const { access_token, role: userRole } = response.data;
+
+      // ✅ Store token consistently
+      localStorage.setItem("access_token", access_token);
+      localStorage.setItem("role", userRole);
+
       setMessage("Login successful! Redirecting...");
 
-      // 🎯 Role ke basis pe redirect
       setTimeout(() => {
-        if (role === "Distributor") {
+        if (userRole === "Distributor") {
           navigate("/distributor");
-        } else {
+        } else if (userRole === "Receiver") {
           navigate("/receiver");
+        } else {
+          navigate("/loginAs");
         }
       }, 1000);
-      
     } catch (error) {
       setMessage(error.response ? error.response.data.message : "Invalid credentials!");
     }
@@ -54,22 +60,22 @@ export default function Login() {
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label className="form-label">Username</label>
-            <input 
-              type="text" 
-              className="form-control" 
-              value={username} 
-              onChange={(e) => setUsername(e.target.value)} 
-              required 
+            <input
+              type="text"
+              className="form-control"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
             />
           </div>
           <div className="mb-3">
             <label className="form-label">Password</label>
-            <input 
-              type="password" 
-              className="form-control" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-              required 
+            <input
+              type="password"
+              className="form-control"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </div>
           <button type="submit" className="btn btn-primary w-100">Login</button>

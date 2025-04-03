@@ -7,7 +7,7 @@ const Register = () => {
   const [formData, setFormData] = useState({
     collegeName: "",
     fullName: "",
-    role: "Distributor",
+    role: "Distributor", // Default to Distributor
     distributorReceiverId: "",
     phoneNumber: "",
     email: "",
@@ -32,12 +32,12 @@ const Register = () => {
       });
 
       setMessage(response.data.message);
-      
+
       // Redirect to login after successful registration
       setTimeout(() => {
         navigate("/loginAs");
       }, 1000);
-      
+
     } catch (error) {
       setMessage(error.response ? error.response.data.message : "Something went wrong!");
     }
@@ -50,11 +50,21 @@ const Register = () => {
 
       <form onSubmit={handleSubmit} className="p-3 border rounded shadow">
         {Object.keys(formData).map((field) => (
-          <div className="mb-3" key={field}>
-            <label className="form-label">{field.replace(/([A-Z])/g, " $1")}</label>
-            <input type={field === "password" ? "password" : "text"} name={field} className="form-control" value={formData[field]} onChange={handleChange} required />
-          </div>
+          field !== "role" && (
+            <div className="mb-3" key={field}>
+              <label className="form-label">{field.replace(/([A-Z])/g, " $1")}</label>
+              <input type={field === "password" ? "password" : "text"} name={field} className="form-control" value={formData[field]} onChange={handleChange} required />
+            </div>
+          )
         ))}
+
+        <div className="mb-3">
+          <label className="form-label">Role</label>
+          <select name="role" className="form-control" value={formData.role} onChange={handleChange} required>
+            <option value="Distributor">Distributor</option>
+            <option value="Receiver">Receiver</option>
+          </select>
+        </div>
 
         <button type="submit" className="btn btn-primary w-100">Register</button>
       </form>
