@@ -7,8 +7,8 @@ const Register = () => {
   const [formData, setFormData] = useState({
     collegeName: "",
     fullName: "",
-    role: "Distributor", // Default to Distributor
-    distributorReceiverId: "",
+    role: "Distributor",
+    distributOrReceiverId: "",
     phoneNumber: "",
     email: "",
     username: "",
@@ -32,42 +32,114 @@ const Register = () => {
       });
 
       setMessage(response.data.message);
-
-      // Redirect to login after successful registration
-      setTimeout(() => {
-        navigate("/loginAs");
-      }, 1000);
-
+      setTimeout(() => navigate("/loginAs"), 1000);
     } catch (error) {
       setMessage(error.response ? error.response.data.message : "Something went wrong!");
     }
   };
 
   return (
-    <div className="container mt-4" style={{ maxWidth: "400px" }}>
-      <h2 className="text-center">Register</h2>
-      {message && <div className="alert alert-info">{message}</div>}
+    <div
+      className="d-flex justify-content-center align-items-center"
+      style={{
+        minHeight: "100vh",
+        backgroundImage: `url("/image.png")`, // Replace with your image
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      <div
+        className="p-5 rounded shadow-lg"
+        style={{
+          width: "40%",
+          maxWidth: "600px",
+          backgroundColor: "rgba(0, 0, 0, 0.2)", // Optional: Can keep this to give a slightly darker background to the form
+          color: "#fff",
+          paddingTop: "30px", // Padding at the top of the box
+          paddingBottom: "30px",
+        }}
+      >
+        <h2 className="text-center mb-4" style={{ fontSize: "32px", fontWeight: "600" }}>
+          Create an Account
+        </h2>
 
-      <form onSubmit={handleSubmit} className="p-3 border rounded shadow">
-        {Object.keys(formData).map((field) => (
-          field !== "role" && (
-            <div className="mb-3" key={field}>
-              <label className="form-label">{field.replace(/([A-Z])/g, " $1")}</label>
-              <input type={field === "password" ? "password" : "text"} name={field} className="form-control" value={formData[field]} onChange={handleChange} required />
-            </div>
-          )
-        ))}
+        {message && (
+          <div className="alert alert-info text-center" role="alert">
+            {message}
+          </div>
+        )}
 
-        <div className="mb-3">
-          <label className="form-label">Role</label>
-          <select name="role" className="form-control" value={formData.role} onChange={handleChange} required>
-            <option value="Distributor">Distributor</option>
-            <option value="Receiver">Receiver</option>
-          </select>
+        <form onSubmit={handleSubmit}>
+          {/* Form fields */}
+          {Object.keys(formData).map((field) =>
+            field !== "role" ? (
+              <div className="mb-4" key={field}>
+                <label className="form-label text-light" style={{ fontSize: "14px", fontWeight: "500" }}>
+                  {field.replace(/([A-Z])/g, " $1")}
+                </label>
+                <input
+                  type={field === "password" ? "password" : "text"}
+                  name={field}
+                  className="form-control bg-dark text-white border-secondary"
+                  value={formData[field]}
+                  onChange={handleChange}
+                  required
+                  style={{
+                    height: "45px",
+                    borderRadius: "10px",
+                    fontSize: "16px",
+                  }}
+                />
+              </div>
+            ) : null
+          )}
+
+          {/* Role select */}
+          <div className="mb-4">
+            <label className="form-label text-light" style={{ fontSize: "14px", fontWeight: "500" }}>
+              Role
+            </label>
+            <select
+              name="role"
+              className="form-select bg-dark text-white border-secondary"
+              value={formData.role}
+              onChange={handleChange}
+              required
+              style={{
+                height: "45px",
+                borderRadius: "10px",
+                fontSize: "16px",
+              }}
+            >
+              <option value="Distributor">Distributor</option>
+              <option value="Receiver">Receiver</option>
+            </select>
+          </div>
+
+          <button
+            type="submit"
+            className="btn w-100 py-2"
+            style={{
+              fontSize: "18px",
+              borderRadius: "10px",
+              fontWeight: "500",
+              backgroundColor: "#A67B5B", // Light brown color
+            }}
+          >
+            Register
+          </button>
+        </form>
+
+        <div className="text-center mt-3">
+          <p style={{ fontSize: "14px", color: "#ddd" }}>
+            Already have an account?{" "}
+            <a href="/login" style={{ color: "#007bff" }}>
+              Login here
+            </a>
+          </p>
         </div>
-
-        <button type="submit" className="btn btn-primary w-100">Register</button>
-      </form>
+      </div>
     </div>
   );
 };
