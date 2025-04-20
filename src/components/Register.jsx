@@ -8,7 +8,7 @@ const Register = () => {
     collegeName: "",
     fullName: "",
     role: "Distributor",
-    distributOrReceiverId: "",
+    distributorReceiverId: "",
     phoneNumber: "",
     email: "",
     username: "",
@@ -36,7 +36,8 @@ const Register = () => {
     } catch (error) {
       setMessage(error.response ? error.response.data.message : "Something went wrong!");
     }
-  };
+};
+
 
   return (
     <div

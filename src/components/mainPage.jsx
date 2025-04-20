@@ -8,16 +8,21 @@ export default function MainPage() {
       {/* Navbar */}
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-4">
         <a className="navbar-brand" href="#">VIT</a>
-        <div className="ms-auto">
-          <button className="btn btn-light me-2" onClick={() => navigate("/")}>
+        <div className="ms-auto d-flex align-items-center">
+          <span 
+            className="nav-link text-light me-3 hover-effect" 
+            style={{ cursor: 'pointer' }}
+            onClick={() => navigate("/")}
+          >
             Home
-          </button>
-          {/* <button className="btn btn-primary me-2" onClick={() => navigate("/register")}>
-            Sign In
-          </button>
-          <button className="btn btn-outline-light" onClick={() => navigate("/loginAs")}>
-            Login
-          </button> */}
+          </span>
+          <span 
+            className="nav-link text-light me-3 hover-effect" 
+            style={{ cursor: 'pointer' }}
+            onClick={() => navigate("/about")}
+          >
+            About
+          </span>
         </div>
       </nav>
 
@@ -25,6 +30,18 @@ export default function MainPage() {
       <div style={{ margin: 0, padding: 0 }}>
         <Outlet />
       </div>
+
+      {/* Add this style tag for hover effects */}
+      <style>
+        {`
+          .hover-effect {
+            transition: color 0.3s ease;
+          }
+          .hover-effect:hover {
+            color: #adb5bd !important;  /* Lighter gray color on hover */
+          }
+        `}
+      </style>
     </div>
   );
 }

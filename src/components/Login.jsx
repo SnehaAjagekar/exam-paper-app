@@ -30,7 +30,6 @@ export default function Login() {
 
       const { access_token, role: userRole } = response.data;
 
-      // ✅ Store token consistently
       localStorage.setItem("access_token", access_token);
       localStorage.setItem("role", userRole);
 
@@ -51,37 +50,88 @@ export default function Login() {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center" style={{ height: "70vh" }}>
-      <div className="card p-4 shadow-lg" style={{ width: "400px" }}>
-        <h2 className="text-center mb-4">Login as {role}</h2>
+    <div
+      style={{
+        minHeight: "100vh",
+        backgroundImage: `url("/image.png")`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <div
+        className="p-4 shadow-lg"
+        style={{
+          width: "400px",
+          backgroundColor: "rgba(255, 248, 240, 0.95)",
+          borderRadius: "16px",
+          boxShadow: "0 8px 16px rgba(0,0,0,0.2)",
+        }}
+      >
+        <h2
+          className="text-center mb-4"
+          style={{
+            color: "#5c3a1d",
+            fontWeight: "bold",
+          }}
+        >
+          Login as {role}
+        </h2>
 
-        {message && <div className="alert alert-info">{message}</div>}
+        {message && (
+          <div className="alert alert-info text-center">{message}</div>
+        )}
 
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label className="form-label">Username</label>
+            <label className="form-label" style={{ color: "#5c3a1d" }}>
+              Username
+            </label>
             <input
               type="text"
               className="form-control"
+              style={{
+                border: "1px solid #c49b6c",
+                borderRadius: "8px",
+              }}
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
             />
           </div>
           <div className="mb-3">
-            <label className="form-label">Password</label>
+            <label className="form-label" style={{ color: "#5c3a1d" }}>
+              Password
+            </label>
             <input
               type="password"
               className="form-control"
+              style={{
+                border: "1px solid #c49b6c",
+                borderRadius: "8px",
+              }}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary w-100">Login</button>
+          <button
+            type="submit"
+            className="btn w-100"
+            style={{
+              backgroundColor: "#a27045",
+              color: "#fff",
+              fontWeight: "500",
+            }}
+          >
+            Login
+          </button>
         </form>
 
-        <p className="text-center mt-3">
+        <p className="text-center mt-3" style={{ color: "#5c3a1d" }}>
           Don't have an account? <a href="/register">Sign up</a>
         </p>
       </div>
