@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
+import { validateToken } from "../utils/tokenValidation";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -11,6 +12,19 @@ export default function Login() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const role = searchParams.get("role");
+
+  const token = localStorage.getItem("access_token");
+  const storedUser = validateToken(token);
+        
+  useEffect(()=>{
+    console.log('storedUser', storedUser);
+    if(storedUser && (storedUser.role === "Receiver")){
+      navigate("/receiver")
+    } else if(storedUser && ( storedUser.role === "Distributor")){
+      navigate("/distributor")
+    }
+  },
+  [storedUser, token])
 
   useEffect(() => {
     if (!role) {

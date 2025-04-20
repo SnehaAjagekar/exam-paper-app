@@ -6,12 +6,20 @@ import { validateToken } from "../utils/tokenValidation";
 function ReceiverPage() {
   const [examPapers, setExamPapers] = useState([]);
   const navigate = useNavigate(); // Hook to navigate
+  const token = localStorage.getItem("access_token");
+  const storedUser = validateToken(token);
+  console.log('examPapers', examPapers)
+  useEffect(()=>{
+    console.log('storedUser', storedUser);
+    if(!storedUser ||( storedUser.role !== "Receiver")){
+      localStorage.removeItem("access_token")
+      navigate("/login")
+    }
+  },
+  [storedUser, token])
 
   useEffect(() => {
     const fetchExams = async () => {
-      const token = localStorage.getItem("access_token");
-      const storedUser = validateToken(token);
-       
 
       try {
         const res = await axios.get(
@@ -141,14 +149,14 @@ function ReceiverPage() {
         ) : (
           examPapers.map((exam, index) => (
             <div key={index} style={styles.examPaper}>
-              <p><strong>Receiver:</strong> {exam.receiverName?.username}</p>
+              <p><strong>Receiver:</strong> {exam.receiver?.username}</p>
               {exam.files?.map((file) => (
                 <div key={file.filename}>
                   <button 
                     onClick={() => handleDownload(file.filename)}
                     style={styles.downloadLink}
                   >
-                    Download {file.setName}
+                    Download {file.setName} : {file.filename}
                   </button>
                 </div>
               ))}

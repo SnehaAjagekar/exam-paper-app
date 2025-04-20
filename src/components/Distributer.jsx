@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; // for logout redirect
 import { validateToken } from '../utils/tokenValidation';
@@ -13,7 +13,16 @@ const Distributer = () => {
   });
 
   const navigate = useNavigate(); // Hook for navigation
+  const accessToken = localStorage.getItem("access_token");
+  const storedUser = validateToken(accessToken);
 
+  useEffect(()=>{
+    if(!storedUser ||( storedUser.role !== "Distributor")){
+      localStorage.removeItem("access_token")
+      navigate("/login")
+    }
+  },
+  [storedUser, accessToken])
   // Handle file input changes
   const handleFileChange = (event) => {
     const { name, files } = event.target;
@@ -22,9 +31,8 @@ const Distributer = () => {
       [name]: files[0],
     }));
   };
-  
+
   const handleUpload = async () => {
-    const accessToken = localStorage.getItem("access_token");
     
     if (!accessToken) {
       console.error("No access token found!");

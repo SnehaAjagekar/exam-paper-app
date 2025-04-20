@@ -1,8 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { validateToken } from "../utils/tokenValidation";
 
 const LoginAsPage = () => {
   const navigate = useNavigate();
+
+  const token = localStorage.getItem("access_token");
+    const storedUser = validateToken(token);
+          
+    useEffect(()=>{
+      console.log('storedUser', storedUser);
+      if(storedUser && (storedUser.role === "Receiver")){
+        navigate("/receiver")
+      } else if(storedUser && ( storedUser.role === "Distributor")){
+        navigate("/distributor")
+      }
+    },
+    [storedUser, token])
 
   return (
     <div
