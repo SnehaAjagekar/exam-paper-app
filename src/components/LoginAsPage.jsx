@@ -1,79 +1,114 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { validateToken } from "../utils/tokenValidation";
+import { FaUserTie, FaUserGraduate, FaSignInAlt, FaUserPlus } from "react-icons/fa";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const LoginAsPage = () => {
   const navigate = useNavigate();
-
-  const token = localStorage.getItem("access_token");
-    const storedUser = validateToken(token);
           
-    useEffect(()=>{
-      console.log('storedUser', storedUser);
-      if(storedUser && (storedUser.role === "Receiver")){
-        navigate("/receiver")
-      } else if(storedUser && ( storedUser.role === "Distributor")){
-        navigate("/distributor")
-      }
-    },
-    [storedUser, token])
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    const storedUser = validateToken(token);
+    
+    console.log('storedUser', storedUser);
+    if(storedUser && typeof storedUser === 'object' && storedUser.role === "Receiver"){
+      navigate("/receiver")
+    } else if(storedUser && typeof storedUser === 'object' && storedUser.role === "Distributor"){
+      navigate("/distributor")
+    }
+  }, [navigate]);
 
   return (
-    <div
-      className="d-flex justify-content-center align-items-center"
-      style={{
-        minHeight: "100vh",
-        backgroundImage: `url("/image.png")`, // Replace with your image
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-      }}
-    >
-      <div
-        className="text-center p-4"
-        style={{
-          backgroundColor: "rgba(252, 244, 244, 0.85)",
-          borderRadius: "16px",
-          boxShadow: "0 8px 16px rgba(0,0,0,0.2)",
-        }}
-      >
-        <img
-          src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-          alt="login-icon"
-          style={{ width: "100px", marginBottom: "20px" }}
-        />
+    <div className="min-vh-100 bg-light d-flex align-items-center py-5">
+      <div className="container">
+        <div className="row justify-content-center">
+          <div className="col-lg-6 col-xl-5">
+            <div className="card shadow-sm">
+              <div className="card-header bg-primary text-white text-center py-4">
+                <FaSignInAlt size={48} className="mb-3" />
+                <h2 className="mb-0" style={{ fontSize: "28px", fontWeight: "600" }}>
+                  ExamPortal
+                </h2>
+                <p className="mb-0 mt-2 opacity-75">Choose your role to continue</p>
+              </div>
 
-        <h2 className="mb-4" style={{ fontWeight: "bold", color: "#4b2e1d" }}>
-          Login As
-        </h2>
+              <div className="card-body p-5">
+                <div className="row g-3">
+                  {/* Distributor Card */}
+                  <div className="col-12">
+                    <div 
+                      className="card border-primary h-100"
+                      style={{ 
+                        cursor: "pointer",
+                        transition: "all 0.3s ease"
+                      }}
+                      onClick={() => navigate("/login?role=Distributor")}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = "#f8f9fa";
+                        e.currentTarget.style.transform = "translateY(-2px)";
+                        e.currentTarget.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = "white";
+                        e.currentTarget.style.transform = "translateY(0)";
+                        e.currentTarget.style.boxShadow = "none";
+                      }}
+                    >
+                      <div className="card-body text-center py-4">
+                        <FaUserTie size={32} className="text-primary mb-3" />
+                        <h5 className="card-title mb-2">Distributor</h5>
+                        <p className="card-text text-muted small mb-0">
+                          Upload and manage exam papers
+                        </p>
+                      </div>
+                    </div>
+                  </div>
 
-        <button
-          className="btn mb-3"
-          style={{
-            backgroundColor: "#a27045",
-            color: "#fff",
-            fontWeight: "500",
-            width: "220px",
-          }}
-          onClick={() => navigate("/login?role=Distributor")}
-        >
-          Login as Distributor
-        </button>
+                  {/* Receiver Card */}
+                  <div className="col-12">
+                    <div 
+                      className="card border-success h-100"
+                      style={{ 
+                        cursor: "pointer",
+                        transition: "all 0.3s ease"
+                      }}
+                      onClick={() => navigate("/login?role=Receiver")}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = "#f8f9fa";
+                        e.currentTarget.style.transform = "translateY(-2px)";
+                        e.currentTarget.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = "white";
+                        e.currentTarget.style.transform = "translateY(0)";
+                        e.currentTarget.style.boxShadow = "none";
+                      }}
+                    >
+                      <div className="card-body text-center py-4">
+                        <FaUserGraduate size={32} className="text-success mb-3" />
+                        <h5 className="card-title mb-2">Receiver</h5>
+                        <p className="card-text text-muted small mb-0">
+                          Access and download assigned papers
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-        <br />
-
-        <button
-          className="btn"
-          style={{
-            backgroundColor: "#c49b6c",
-            color: "#fff",
-            fontWeight: "500",
-            width: "220px",
-          }}
-          onClick={() => navigate("/login?role=Receiver")}
-        >
-          Login as Receiver
-        </button>
+                <div className="text-center mt-4 pt-3 border-top">
+                  <p className="text-muted mb-0">
+                    Don't have an account?{" "}
+                    <a href="/register" className="text-decoration-none">
+                      <FaUserPlus className="me-1" />
+                      Create Account
+                    </a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

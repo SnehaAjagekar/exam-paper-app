@@ -22,7 +22,7 @@ export default function Home() {
       }}
     >
       <h1 className="text-white text-3xl font-bold text-center">
-        Welcome to Our Platform
+        Secure Exam Paper Upload
       </h1>
       <p className="text-white mt-2 text-center">
         Please sign in or log in to continue

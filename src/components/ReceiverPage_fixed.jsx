@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import DashboardLayout from './layout/DashboardLayout';
 import { validateToken } from '../utils/tokenValidation';
-import { FaDownload, FaFileAlt, FaUser, FaCalendarAlt, FaEye, FaSignOutAlt } from 'react-icons/fa';
+import { FaDownload, FaFileAlt, FaUser, FaCalendarAlt, FaEye } from 'react-icons/fa';
 
 const ReceiverPage = () => {
   const [examPapers, setExamPapers] = useState([]);
@@ -12,12 +12,6 @@ const ReceiverPage = () => {
   const [user, setUser] = useState(null);
 
   const navigate = useNavigate();
-
-  const handleLogout = () => {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('user');
-    navigate('/login');
-  };
 
   const fetchExamPapers = useCallback(async (storedUser) => {
     if (!storedUser) return;
@@ -103,22 +97,8 @@ const ReceiverPage = () => {
     <DashboardLayout>
       <div className="row">
         <div className="col-12 mb-4">
-          <div className="d-flex justify-content-between align-items-center">
-            <div>
-              <h2 className="mb-1">Your Assigned Exam Papers</h2>
-              <p className="text-muted">Download exam papers assigned to your receiver ID: <strong>{user?.receiverId}</strong></p>
-            </div>
-            <div>
-              <button 
-                className="btn btn-outline-danger"
-                onClick={handleLogout}
-                title="Logout"
-              >
-                <FaSignOutAlt className="me-2" />
-                Logout
-              </button>
-            </div>
-          </div>
+          <h2 className="mb-1">Your Assigned Exam Papers</h2>
+          <p className="text-muted">Download exam papers assigned to your receiver ID: <strong>{user?.receiverId}</strong></p>
         </div>
       </div>
 
