@@ -1,6 +1,7 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { FaUserPlus, FaUser, FaEnvelope, FaLock, FaPhone, FaBuilding, FaIdCard, FaUserTie } from "react-icons/fa";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const Register = () => {
@@ -16,6 +17,7 @@ const Register = () => {
   });
 
   const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -25,6 +27,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
+    setIsLoading(true);
 
     try {
       const response = await axios.post("http://127.0.0.1:5000/register", formData, {
@@ -35,110 +38,140 @@ const Register = () => {
       setTimeout(() => navigate("/loginAs"), 1000);
     } catch (error) {
       setMessage(error.response ? error.response.data.message : "Something went wrong!");
+    } finally {
+      setIsLoading(false);
     }
-};
+  };
 
+  const getFieldIcon = (field) => {
+    const iconMap = {
+      collegeName: FaBuilding,
+      fullName: FaUser,
+      distributorReceiverId: FaIdCard,
+      phoneNumber: FaPhone,
+      email: FaEnvelope,
+      username: FaUser,
+      password: FaLock,
+    };
+    return iconMap[field] || FaUser;
+  };
+
+  const getFieldLabel = (field) => {
+    const labelMap = {
+      collegeName: "College Name",
+      fullName: "Full Name",
+      distributorReceiverId: "Distributor/Receiver ID",
+      phoneNumber: "Phone Number",
+      email: "Email Address",
+      username: "Username",
+      password: "Password",
+    };
+    return labelMap[field] || field.replace(/([A-Z])/g, " $1");
+  };
 
   return (
-    <div
-      className="d-flex justify-content-center align-items-center"
-      style={{
-        minHeight: "100vh",
-        backgroundImage: `url("/image.png")`, // Replace with your image
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-      }}
-    >
-      <div
-        className="p-5 rounded shadow-lg"
-        style={{
-          width: "40%",
-          maxWidth: "600px",
-          backgroundColor: "rgba(0, 0, 0, 0.2)", // Optional: Can keep this to give a slightly darker background to the form
-          color: "#fff",
-          paddingTop: "30px", // Padding at the top of the box
-          paddingBottom: "30px",
-        }}
-      >
-        <h2 className="text-center mb-4" style={{ fontSize: "32px", fontWeight: "600" }}>
-          Create an Account
-        </h2>
-
-        {message && (
-          <div className="alert alert-info text-center" role="alert">
-            {message}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit}>
-          {/* Form fields */}
-          {Object.keys(formData).map((field) =>
-            field !== "role" ? (
-              <div className="mb-4" key={field}>
-                <label className="form-label text-light" style={{ fontSize: "14px", fontWeight: "500" }}>
-                  {field.replace(/([A-Z])/g, " $1")}
-                </label>
-                <input
-                  type={field === "password" ? "password" : "text"}
-                  name={field}
-                  className="form-control bg-dark text-white border-secondary"
-                  value={formData[field]}
-                  onChange={handleChange}
-                  required
-                  style={{
-                    height: "45px",
-                    borderRadius: "10px",
-                    fontSize: "16px",
-                  }}
-                />
+    <div className="min-vh-100 bg-light d-flex align-items-center py-5">
+      <div className="container">
+        <div className="row justify-content-center">
+          <div className="col-lg-8 col-xl-6">
+            <div className="card shadow-sm">
+              <div className="card-header bg-primary text-white text-center py-4">
+                <FaUserPlus size={48} className="mb-3" />
+                <h2 className="mb-0" style={{ fontSize: "28px", fontWeight: "600" }}>
+                  Create Account
+                </h2>
+                <p className="mb-0 mt-2 opacity-75">Join the ExamPortal community</p>
               </div>
-            ) : null
-          )}
 
-          {/* Role select */}
-          <div className="mb-4">
-            <label className="form-label text-light" style={{ fontSize: "14px", fontWeight: "500" }}>
-              Role
-            </label>
-            <select
-              name="role"
-              className="form-select bg-dark text-white border-secondary"
-              value={formData.role}
-              onChange={handleChange}
-              required
-              style={{
-                height: "45px",
-                borderRadius: "10px",
-                fontSize: "16px",
-              }}
-            >
-              <option value="Distributor">Distributor</option>
-              <option value="Receiver">Receiver</option>
-            </select>
+              <div className="card-body p-5">
+                {message && (
+                  <div 
+                    className={`alert text-center ${
+                      message.includes('successful') || message.includes('created') 
+                        ? 'alert-success' 
+                        : 'alert-danger'
+                    }`} 
+                    role="alert"
+                  >
+                    {message}
+                  </div>
+                )}
+
+                <form onSubmit={handleSubmit}>
+                  <div className="row">
+                    {Object.keys(formData).map((field) =>
+                      field !== "role" ? (
+                        <div className="col-md-6 mb-3" key={field}>
+                          <label className="form-label">
+                            {React.createElement(getFieldIcon(field), { className: "me-2 text-primary" })}
+                            {getFieldLabel(field)}
+                            <span className="text-danger"> *</span>
+                          </label>
+                          <input
+                            type={field === "password" ? "password" : field === "email" ? "email" : "text"}
+                            name={field}
+                            className="form-control"
+                            value={formData[field]}
+                            onChange={handleChange}
+                            required
+                            placeholder={`Enter your ${getFieldLabel(field).toLowerCase()}`}
+                          />
+                        </div>
+                      ) : null
+                    )}
+
+                    {/* Role select */}
+                    <div className="col-md-6 mb-3">
+                      <label className="form-label">
+                        <FaUserTie className="me-2 text-primary" />
+                        Role
+                        <span className="text-danger"> *</span>
+                      </label>
+                      <select
+                        name="role"
+                        className="form-select"
+                        value={formData.role}
+                        onChange={handleChange}
+                        required
+                      >
+                        <option value="Distributor">Distributor</option>
+                        <option value="Receiver">Receiver</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="d-grid mt-4">
+                    <button
+                      type="submit"
+                      className="btn btn-primary btn-lg"
+                      disabled={isLoading}
+                    >
+                      {isLoading ? (
+                        <>
+                          <span className="spinner-border spinner-border-sm me-2" role="status" />
+                          Creating Account...
+                        </>
+                      ) : (
+                        <>
+                          <FaUserPlus className="me-2" />
+                          Create Account
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </form>
+
+                <div className="text-center mt-4 pt-3 border-top">
+                  <p className="text-muted mb-0">
+                    Already have an account?{" "}
+                    <a href="/loginAs" className="text-decoration-none">
+                      Sign in here
+                    </a>
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
-
-          <button
-            type="submit"
-            className="btn w-100 py-2"
-            style={{
-              fontSize: "18px",
-              borderRadius: "10px",
-              fontWeight: "500",
-              backgroundColor: "#A67B5B", // Light brown color
-            }}
-          >
-            Register
-          </button>
-        </form>
-
-        <div className="text-center mt-3">
-          <p style={{ fontSize: "14px", color: "#ddd" }}>
-            Already have an account?{" "}
-            <a href="/login" style={{ color: "#007bff" }}>
-              Login here
-            </a>
-          </p>
         </div>
       </div>
     </div>
