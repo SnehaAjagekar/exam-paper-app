@@ -1,47 +1,46 @@
 import { Outlet, useNavigate } from "react-router-dom";
+import '../styles/main-page.css';
 
 export default function MainPage() {
   const navigate = useNavigate();
 
   return (
-    <div style={{ margin: 0, padding: 0 }}>
-      {/* Navbar */}
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-4">
-        <a className="navbar-brand" href="#">VIT</a>
-        <div className="ms-auto d-flex align-items-center">
-          <span 
-            className="nav-link text-light me-3 hover-effect" 
-            style={{ cursor: 'pointer' }}
+    <div className="main-page-wrapper">
+      {/* Navigation Bar */}
+      <nav className="main-navbar">
+        <div className="navbar-container">
+          <button 
+            className="navbar-brand"
             onClick={() => navigate("/")}
+            title="Go to home"
           >
-            Home
-          </span>
-          <span 
-            className="nav-link text-light me-3 hover-effect" 
-            style={{ cursor: 'pointer' }}
-            onClick={() => navigate("/about")}
-          >
-            About
-          </span>
+            <span className="navbar-brand-icon">🔒</span>
+            <span className="navbar-brand-text">SecureExam</span>
+          </button>
+          
+          <div className="navbar-menu">
+            <button 
+              className="navbar-link"
+              onClick={() => navigate("/")}
+              title="Go to home"
+            >
+              Home
+            </button>
+            <button 
+              className="navbar-link"
+              onClick={() => navigate("/about")}
+              title="View about page"
+            >
+              About
+            </button>
+          </div>
         </div>
       </nav>
 
       {/* Dynamic Page Content */}
-      <div style={{ margin: 0, padding: 0 }}>
+      <div className="page-wrapper">
         <Outlet />
       </div>
-
-      {/* Add this style tag for hover effects */}
-      <style>
-        {`
-          .hover-effect {
-            transition: color 0.3s ease;
-          }
-          .hover-effect:hover {
-            color: #adb5bd !important;  /* Lighter gray color on hover */
-          }
-        `}
-      </style>
     </div>
   );
 }

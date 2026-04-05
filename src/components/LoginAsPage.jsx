@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { validateToken } from "../utils/tokenValidation";
-import { FaUserTie, FaUserGraduate, FaSignInAlt, FaUserPlus } from "react-icons/fa";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { FaUpload, FaDownload, FaArrowRight } from "react-icons/fa";
+import "../styles/login-as-page.css";
 
 const LoginAsPage = () => {
   const navigate = useNavigate();
@@ -20,94 +20,75 @@ const LoginAsPage = () => {
   }, [navigate]);
 
   return (
-    <div className="min-vh-100 bg-light d-flex align-items-center py-5">
-      <div className="container">
-        <div className="row justify-content-center">
-          <div className="col-lg-6 col-xl-5">
-            <div className="card shadow-sm">
-              <div className="card-header bg-primary text-white text-center py-4">
-                <FaSignInAlt size={48} className="mb-3" />
-                <h2 className="mb-0" style={{ fontSize: "28px", fontWeight: "600" }}>
-                  ExamPortal
-                </h2>
-                <p className="mb-0 mt-2 opacity-75">Choose your role to continue</p>
+    <div className="login-as-container">
+      <div className="login-as-content">
+        <div className="login-as-header">
+          <h1 className="login-as-title">Select Your Role</h1>
+          <p className="login-as-subtitle">
+            Choose how you'll access the SecureExam Portal
+          </p>
+        </div>
+
+        <div className="login-as-cards">
+          {/* Distributor Card */}
+          <div 
+            className="role-card distributor-card fade-in-card"
+            onClick={() => navigate("/login?role=Distributor")}
+          >
+            <div className="role-card-content">
+              <div className="role-icon distributor-icon">
+                <FaUpload size={40} />
               </div>
-
-              <div className="card-body p-5">
-                <div className="row g-3">
-                  {/* Distributor Card */}
-                  <div className="col-12">
-                    <div 
-                      className="card border-primary h-100"
-                      style={{ 
-                        cursor: "pointer",
-                        transition: "all 0.3s ease"
-                      }}
-                      onClick={() => navigate("/login?role=Distributor")}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = "#f8f9fa";
-                        e.currentTarget.style.transform = "translateY(-2px)";
-                        e.currentTarget.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = "white";
-                        e.currentTarget.style.transform = "translateY(0)";
-                        e.currentTarget.style.boxShadow = "none";
-                      }}
-                    >
-                      <div className="card-body text-center py-4">
-                        <FaUserTie size={32} className="text-primary mb-3" />
-                        <h5 className="card-title mb-2">Distributor</h5>
-                        <p className="card-text text-muted small mb-0">
-                          Upload and manage exam papers
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Receiver Card */}
-                  <div className="col-12">
-                    <div 
-                      className="card border-success h-100"
-                      style={{ 
-                        cursor: "pointer",
-                        transition: "all 0.3s ease"
-                      }}
-                      onClick={() => navigate("/login?role=Receiver")}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = "#f8f9fa";
-                        e.currentTarget.style.transform = "translateY(-2px)";
-                        e.currentTarget.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = "white";
-                        e.currentTarget.style.transform = "translateY(0)";
-                        e.currentTarget.style.boxShadow = "none";
-                      }}
-                    >
-                      <div className="card-body text-center py-4">
-                        <FaUserGraduate size={32} className="text-success mb-3" />
-                        <h5 className="card-title mb-2">Receiver</h5>
-                        <p className="card-text text-muted small mb-0">
-                          Access and download assigned papers
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="text-center mt-4 pt-3 border-top">
-                  <p className="text-muted mb-0">
-                    Don't have an account?{" "}
-                    <a href="/register" className="text-decoration-none">
-                      <FaUserPlus className="me-1" />
-                      Create Account
-                    </a>
-                  </p>
-                </div>
+              <h2 className="role-title">Distributor</h2>
+              <p className="role-description">
+                Upload exam papers and manage distribution to receivers
+              </p>
+              <div className="role-features">
+                <div className="feature">✓ Upload multiple paper sets</div>
+                <div className="feature">✓ Assign to receivers</div>
+                <div className="feature">✓ View upload history</div>
+              </div>
+              <div className="role-action">
+                Continue as Distributor
+                <FaArrowRight className="ms-2" size={16} />
               </div>
             </div>
           </div>
+
+          {/* Receiver Card */}
+          <div 
+            className="role-card receiver-card fade-in-card"
+            onClick={() => navigate("/login?role=Receiver")}
+            style={{ animationDelay: '80ms' }}
+          >
+            <div className="role-card-content">
+              <div className="role-icon receiver-icon">
+                <FaDownload size={40} />
+              </div>
+              <h2 className="role-title">Receiver</h2>
+              <p className="role-description">
+                Access and download exam papers assigned to you
+              </p>
+              <div className="role-features">
+                <div className="feature">✓ Browse exam papers</div>
+                <div className="feature">✓ Secure download access</div>
+                <div className="feature">✓ Track your downloads</div>
+              </div>
+              <div className="role-action">
+                Continue as Receiver
+                <FaArrowRight className="ms-2" size={16} />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="login-as-footer">
+          <p className="footer-text">
+            Don't have an account? <a href="/register">Create one now</a>
+          </p>
+          <p className="footer-text back-link">
+            <a href="/">← Back to home</a>
+          </p>
         </div>
       </div>
     </div>

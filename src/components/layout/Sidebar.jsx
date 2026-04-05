@@ -7,10 +7,11 @@ import {
   FaUser, 
   FaSignOutAlt,
   FaDownload,
-  FaBars,
-  FaTimes
+  FaTimes,
+  FaLock
 } from 'react-icons/fa';
 import { validateToken } from '../../utils/tokenValidation';
+import '../styles/sidebar.css';
 
 const Sidebar = ({ isCollapsed, toggleSidebar }) => {
   const [user, setUser] = useState(null);
@@ -37,16 +38,16 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
 
     if (user?.role === 'Distributor') {
       return [
-        ...commonItems.slice(0, 1), // Dashboard
+        ...commonItems.slice(0, 1),
         { path: '/distributor', icon: FaUpload, label: 'Upload' },
         { path: '/history', icon: FaHistory, label: 'History' },
-        ...commonItems.slice(1) // Profile
+        ...commonItems.slice(1)
       ];
     } else if (user?.role === 'Receiver') {
       return [
-        ...commonItems.slice(0, 1), // Dashboard
+        ...commonItems.slice(0, 1),
         { path: '/receiver', icon: FaDownload, label: 'Downloads' },
-        ...commonItems.slice(1) // Profile
+        ...commonItems.slice(1)
       ];
     }
     
@@ -60,75 +61,52 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
       {/* Mobile overlay */}
       {!isCollapsed && (
         <div 
-          className="position-fixed w-100 h-100 d-md-none"
-          style={{ backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1040 }}
+          className="sidebar-overlay"
           onClick={toggleSidebar}
         />
       )}
       
       {/* Sidebar */}
-      <div 
-        className={`bg-dark text-white position-fixed h-100 d-flex flex-column transition-all ${
-          isCollapsed ? 'd-none d-md-block' : ''
-        }`}
-        style={{ 
-          width: isCollapsed ? '80px' : '250px',
-          zIndex: 1041,
-          transition: 'width 0.3s ease'
-        }}
-      >
+      <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
         {/* Sidebar Header */}
-        <div className="p-3 border-bottom border-secondary">
-          <div className="d-flex align-items-center justify-content-between">
-            {!isCollapsed ? (
-              <h5 className="mb-0 text-truncate">ExamPortal</h5>
-            ) : (
-              <div className="text-center w-100">
-                <FaTachometerAlt size={20} className="text-primary" />
-              </div>
+        <div className="sidebar-header">
+          <div className="sidebar-brand-wrapper">
+            <div className="sidebar-brand-icon">
+              <FaLock size={20} />
+            </div>
+            {!isCollapsed && (
+              <h5 className="sidebar-brand">SecureExam</h5>
             )}
-            <button 
-              className="btn btn-link text-white p-0 d-md-none"
-              onClick={toggleSidebar}
-            >
-              <FaTimes size={18} />
-            </button>
           </div>
+          <button 
+            className="sidebar-close-btn d-lg-none"
+            onClick={toggleSidebar}
+          >
+            <FaTimes size={18} />
+          </button>
         </div>
 
         {/* Navigation Menu */}
-        <nav className="flex-grow-1 py-3">
-          <ul className="list-unstyled">
+        <nav className="sidebar-nav">
+          <ul className="sidebar-menu">
             {menuItems.map((item) => {
               const Icon = item.icon;
               const isActive = location.pathname === item.path;
               
               return (
-                <li key={item.path} className="mb-1">
+                <li className="sidebar-item" key={item.path}>
                   <button
-                    className={`btn w-100 text-start d-flex align-items-center px-3 py-2 border-0 ${
-                      isActive 
-                        ? 'bg-primary text-white' 
-                        : 'text-light hover-bg-secondary'
-                    }`}
+                    className={`sidebar-link ${isActive ? 'active' : ''}`}
                     onClick={() => {
                       navigate(item.path);
                       if (window.innerWidth < 768) toggleSidebar();
                     }}
-                    style={{ 
-                      backgroundColor: isActive ? '#0d6efd' : 'transparent',
-                      transition: 'background-color 0.2s ease'
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!isActive) e.target.style.backgroundColor = '#495057';
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!isActive) e.target.style.backgroundColor = 'transparent';
-                    }}
                     title={isCollapsed ? item.label : ''}
                   >
-                    <Icon className="me-3" size={18} />
-                    {!isCollapsed && <span>{item.label}</span>}
+                    <Icon className="sidebar-icon" size={18} />
+                    {!isCollapsed && (
+                      <span className="sidebar-label">{item.label}</span>
+                    )}
                   </button>
                 </li>
               );
@@ -137,20 +115,19 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
         </nav>
 
         {/* Logout Button */}
-        <div className="p-3 border-top border-secondary">
+        <div className="sidebar-footer">
           <button
-            className="btn w-100 text-start d-flex align-items-center px-3 py-2 border-0 text-light hover-bg-danger"
+            className="sidebar-logout"
             onClick={handleLogout}
-            style={{ backgroundColor: 'transparent', transition: 'background-color 0.2s ease' }}
-            onMouseEnter={(e) => e.target.style.backgroundColor = '#dc3545'}
-            onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
             title={isCollapsed ? 'Logout' : ''}
           >
-            <FaSignOutAlt className="me-3" size={18} />
-            {!isCollapsed && <span>Logout</span>}
+            <FaSignOutAlt className="sidebar-icon" size={18} />
+            {!isCollapsed && (
+              <span className="sidebar-label">Logout</span>
+            )}
           </button>
         </div>
-      </div>
+      </aside>
     </>
   );
 };

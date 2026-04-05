@@ -1,41 +1,56 @@
 import { useNavigate } from "react-router-dom";
+import "../styles/home.css";
 
 export default function Home() {
   const navigate = useNavigate();
 
   return (
-    <div
-      style={{
-        backgroundImage: "url('/WhatsApp Image 2025-04-13 at 19.42.30.jpeg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        minHeight: "100vh",
-        width: "100vw",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        flexDirection: "column",
-        margin: 0,
-        padding: 0,
-        overflow: "hidden",
-      }}
-    >
-      <h1 className="text-white text-3xl font-bold text-center">
-        Secure Exam Paper Upload
-      </h1>
-      <p className="text-white mt-2 text-center">
-        Please sign in or log in to continue
-      </p>
+    <div className="home-container">
+      {/* Decorative rings */}
+      <div className="home-decoration">
+        <div className="ring ring-1"></div>
+        <div className="ring ring-2"></div>
+        <div className="ring ring-3"></div>
+      </div>
 
-      {/* Buttons */}
-      <div className="mt-3 d-flex gap-3">
-        <button className="btn btn-primary" onClick={() => navigate("/register")}>
-          Sign In
-        </button>
-        <button className="btn btn-outline-light" onClick={() => navigate("/loginAs")}>
-          Login
-        </button>
+      {/* Main content */}
+      <div className="home-content">
+        <div className="home-header">
+          <h1 className="home-title">SecureExam Portal</h1>
+          <p className="home-subtitle">
+            Institutional Authority. Human Calm. Exam Security.
+          </p>
+        </div>
+
+        <p className="home-description">
+          Upload and download exam papers with institutional-grade encryption and authentication. Built for universities that take security seriously.
+        </p>
+
+        {/* Buttons */}
+        <div className="home-actions">
+          <button className="btn-primary" onClick={() => navigate("/register")}>
+            Create Account
+          </button>
+          <button className="btn-secondary" onClick={() => navigate("/loginAs")}>
+            Sign In
+          </button>
+        </div>
+
+        {/* Trust indicators */}
+        <div className="home-trust">
+          <div className="trust-item">
+            <span className="trust-icon">🔒</span>
+            <span className="trust-text">AES-256 Encryption</span>
+          </div>
+          <div className="trust-item">
+            <span className="trust-icon">✓</span>
+            <span className="trust-text">Role-Based Access</span>
+          </div>
+          <div className="trust-item">
+            <span className="trust-icon">📝</span>
+            <span className="trust-text">Full Audit Trail</span>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { FaBars, FaUserCircle } from 'react-icons/fa';
+import { FaBars, FaUserCircle, FaSignOutAlt } from 'react-icons/fa';
 import { validateToken } from '../../utils/tokenValidation';
+import { useNavigate } from 'react-router-dom';
+import '../styles/header.css';
 
 const Header = ({ toggleSidebar, isCollapsed }) => {
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
@@ -11,36 +14,59 @@ const Header = ({ toggleSidebar, isCollapsed }) => {
     setUser(validatedUser);
   }, []);
 
-  return (
-    <header className="bg-white shadow-sm border-bottom p-3">
-      <div className="d-flex align-items-center justify-content-between">
-        {/* Left side - Menu toggle and title */}
-        <div className="d-flex align-items-center">
-          <button 
-            className="btn btn-link text-dark p-1 me-3"
-            onClick={toggleSidebar}
-            style={{ fontSize: '1.2rem' }}
-          >
-            <FaBars />
-          </button>
-          <h4 className="mb-0 text-dark d-none d-sm-block">
-            {user?.role === 'Distributor' ? 'Distributor Dashboard' : 'Receiver Dashboard'}
-          </h4>
-          <h6 className="mb-0 text-dark d-block d-sm-none">
-            Dashboard
-          </h6>
-        </div>
+  const handleLogout = () => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('user');
+    navigate('/login');
+  };
 
-        {/* Right side - User info */}
-        <div className="d-flex align-items-center">
-          <div className="d-flex align-items-center text-muted">
-            <FaUserCircle className="me-2" size={24} />
-            <div className="d-none d-sm-block">
-              <small className="d-block text-muted">Logged in as</small>
-              <strong className="text-dark">{user?.role || 'User'}</strong>
-            </div>
+  const getHeaderTitle = () => {
+    const userRole = user?.role;
+    if (userRole === 'Distributor') {
+      return 'Distributor Portal';
+    } else if (userRole === 'Receiver') {
+      return 'Receiver Portal';
+    }
+    return 'SecureExam Portal';
+  };
+
+  const getUserInitials = () => {
+    if (user?.username) {
+      return user.username.substring(0, 2).toUpperCase();
+    }
+    return 'U';
+  };
+
+  return (
+    <header className="header">
+      <div className="header-left">
+        <button 
+          className="header-menu-btn"
+          onClick={toggleSidebar}
+          title="Toggle sidebar"
+        >
+          <FaBars size={18} />
+        </button>
+        <h3 className="header-title">{getHeaderTitle()}</h3>
+      </div>
+
+      <div className="header-right">
+        <div className="header-user">
+          <div className="header-user-avatar">
+            {user ? getUserInitials() : <FaUserCircle size={24} />}
+          </div>
+          <div className="header-user-info">
+            <div className="header-user-label">Logged in as</div>
+            <div className="header-user-name">{user?.role || 'User'}</div>
           </div>
         </div>
+        <button
+          className="header-logout-btn"
+          onClick={handleLogout}
+          title="Logout"
+        >
+          <FaSignOutAlt size={16} />
+        </button>
       </div>
     </header>
   );

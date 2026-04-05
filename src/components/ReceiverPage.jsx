@@ -5,6 +5,8 @@ import DashboardLayout from './layout/DashboardLayout';
 import { validateToken } from '../utils/tokenValidation';
 import { FaDownload, FaFileAlt, FaUser, FaCalendarAlt, FaEye, FaSignOutAlt } from 'react-icons/fa';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:5000";
+
 const ReceiverPage = () => {
   const [examPapers, setExamPapers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -26,7 +28,7 @@ const ReceiverPage = () => {
       setIsLoading(true);
       const accessToken = localStorage.getItem("access_token");
       const response = await axios.get(
-        `http://127.0.0.1:5000/get-exams?receiverId=${storedUser.receiverId}`,
+        `${API_BASE_URL}/get-exams?receiverId=${storedUser.receiverId}`,
         { 
           headers: { 
             Authorization: `Bearer ${accessToken}` 
@@ -68,7 +70,7 @@ const ReceiverPage = () => {
     try {
       const accessToken = localStorage.getItem("access_token");
       const response = await axios.get(
-        `http://127.0.0.1:5000/download/${filename}`,
+        `${API_BASE_URL}/download/${filename}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`

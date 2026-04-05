@@ -3,7 +3,10 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import DashboardLayout from './layout/DashboardLayout';
 import { validateToken } from '../utils/tokenValidation';
-import { FaUpload, FaFileAlt, FaUser, FaSignOutAlt } from 'react-icons/fa';
+import { FaUpload, FaFileAlt, FaUser, FaCheckCircle, FaInfoCircle } from 'react-icons/fa';
+import '../styles/distributor.css';
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:5000";
 
 const Distributer = () => {
   const [receiverId, setReceiverId] = useState('');
@@ -14,15 +17,10 @@ const Distributer = () => {
     setC: null,
   });
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadMessage, setUploadMessage] = useState('');
   const [user, setUser] = useState(null);
 
   const navigate = useNavigate();
-
-  const handleLogout = () => {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('user');
-    navigate('/login');
-  };
 
   useEffect(() => {
     const accessToken = localStorage.getItem("access_token");
@@ -38,10 +36,10 @@ const Distributer = () => {
   }, [navigate]);
 
   const handleFileChange = (event) => {
-    const { name, files } = event.target;
+    const { name, files: fileList } = event.target;
     setFiles((prevFiles) => ({
       ...prevFiles,
-      [name]: files[0],
+      [name]: fileList[0],
     }));
   };
 
@@ -49,16 +47,18 @@ const Distributer = () => {
     const accessToken = localStorage.getItem("access_token");
     
     if (!accessToken) {
-      alert("No access token found!");
+      setUploadMessage('No access token found!');
       return;
     }
 
     if (!receiverId || !subjectName) {
-      alert("Please fill in all required fields!");
+      setUploadMessage('Please fill in all required fields!');
       return;
     }
 
     setIsUploading(true);
+    setUploadMessage('');
+    
     try {
       validateToken(accessToken);
       
@@ -70,7 +70,7 @@ const Distributer = () => {
       if (files.setB) formData.append("setB", files.setB);
       if (files.setC) formData.append("setC", files.setC);
 
-      const response = await axios.post("http://127.0.0.1:5000/upload-exam", formData, {
+      const response = await axios.post(`${API_BASE_URL}/upload-exam`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           "Authorization": `Bearer ${accessToken}`
@@ -78,15 +78,18 @@ const Distributer = () => {
       });
       
       console.log("Upload successful", response.data);
-      alert("Upload Successful!");
+      setUploadMessage('Upload Successful!');
       
       // Reset form
-      setReceiverId('');
-      setSubjectName('');
-      setFiles({ setA: null, setB: null, setC: null });
+      setTimeout(() => {
+        setReceiverId('');
+        setSubjectName('');
+        setFiles({ setA: null, setB: null, setC: null });
+        setUploadMessage('');
+      }, 2000);
       
     } catch (error) {
-      alert(`Upload failed: ${error.response?.data?.message || error.message}`);
+      setUploadMessage(`Upload failed: ${error.response?.data?.message || error.message}`);
       console.error("Upload failed:", error.response?.data || error.message);
       if (error.message.includes("Token")) {
         localStorage.removeItem("access_token");
@@ -99,179 +102,171 @@ const Distributer = () => {
 
   return (
     <DashboardLayout>
-      <div className="row">
-        <div className="col-12 mb-4">
-          <div className="d-flex justify-content-between align-items-center">
-            <div>
-              <h2 className="mb-1">Upload Exam Papers</h2>
-              <p className="text-muted">Upload exam papers and assign them to receivers</p>
-            </div>
-            <div>
-              <button 
-                className="btn btn-outline-danger"
-                onClick={handleLogout}
-                title="Logout"
-              >
-                <FaSignOutAlt className="me-2" />
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="row">
-        {/* Upload Form */}
-        <div className="col-lg-8 mb-4">
-          <div className="card shadow-sm">
-            <div className="card-header bg-primary text-white">
-              <h5 className="card-title mb-0">
-                <FaUpload className="me-2" />
-                New Upload
-              </h5>
-            </div>
-            <div className="card-body">
-              <form>
-                <div className="row mb-3">
-                  <div className="col-md-6">
-                    <label className="form-label">
-                      <FaUser className="me-1" />
-                      Receiver ID *
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Enter receiver ID"
-                      value={receiverId}
-                      onChange={(e) => setReceiverId(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <label className="form-label">
-                      <FaFileAlt className="me-1" />
-                      Subject Name *
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Enter subject name"
-                      value={subjectName}
-                      onChange={(e) => setSubjectName(e.target.value)}
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="mb-3">
-                  <label className="form-label">Set A</label>
-                  <input
-                    type="file"
-                    name="setA"
-                    className="form-control"
-                    onChange={handleFileChange}
-                    accept=".pdf,.doc,.docx"
-                  />
-                  {files.setA && (
-                    <small className="text-success">Selected: {files.setA.name}</small>
-                  )}
-                </div>
-
-                <div className="mb-3">
-                  <label className="form-label">Set B</label>
-                  <input
-                    type="file"
-                    name="setB"
-                    className="form-control"
-                    onChange={handleFileChange}
-                    accept=".pdf,.doc,.docx"
-                  />
-                  {files.setB && (
-                    <small className="text-success">Selected: {files.setB.name}</small>
-                  )}
-                </div>
-
-                <div className="mb-4">
-                  <label className="form-label">Set C</label>
-                  <input
-                    type="file"
-                    name="setC"
-                    className="form-control"
-                    onChange={handleFileChange}
-                    accept=".pdf,.doc,.docx"
-                  />
-                  {files.setC && (
-                    <small className="text-success">Selected: {files.setC.name}</small>
-                  )}
-                </div>
-
-                <div className="d-grid">
-                  <button
-                    type="button"
-                    className="btn btn-primary btn-lg"
-                    onClick={handleUpload}
-                    disabled={isUploading}
-                  >
-                    {isUploading ? (
-                      <>
-                        <span className="spinner-border spinner-border-sm me-2" role="status" />
-                        Uploading...
-                      </>
-                    ) : (
-                      <>
-                        <FaUpload className="me-2" />
-                        Upload Papers
-                      </>
-                    )}
-                  </button>
-                </div>
-              </form>
-            </div>
+      <div className="distributor-container">
+        <div className="distributor-header fade-in-up">
+          <div className="header-content">
+            <h1 className="page-title">Upload Exam Papers</h1>
+            <p className="page-subtitle">Complete the upload form with exam papers for Sets A, B, and C</p>
           </div>
         </div>
 
-        {/* Upload Guidelines */}
-        <div className="col-lg-4 mb-4">
-          <div className="card border-info">
-            <div className="card-header bg-info text-white">
-              <h6 className="card-title mb-0">Upload Guidelines</h6>
-            </div>
-            <div className="card-body">
-              <ul className="list-unstyled mb-0">
-                <li className="mb-2">
-                  <i className="text-info">•</i> Maximum file size: 10MB per file
-                </li>
-                <li className="mb-2">
-                  <i className="text-info">•</i> Supported formats: PDF, DOC, DOCX
-                </li>
-                <li className="mb-2">
-                  <i className="text-info">•</i> Ensure receiver ID is correct
-                </li>
-                <li className="mb-2">
-                  <i className="text-info">•</i> Use clear subject names
-                </li>
-                <li className="mb-0">
-                  <i className="text-info">•</i> At least one set must be uploaded
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="card mt-3 border-success">
-            <div className="card-header bg-success text-white">
-              <h6 className="card-title mb-0">Quick Stats</h6>
-            </div>
-            <div className="card-body text-center">
-              <div className="row">
-                <div className="col-6">
-                  <h4 className="text-primary mb-1">12</h4>
-                  <small className="text-muted">Total Uploads</small>
+        <div className="distributor-content fade-in-up fade-in-up-1">
+          <div className="distributor-form-section">
+            <form onSubmit={(e) => { e.preventDefault(); handleUpload(); }}>
+              <div className="form-row">
+                <div className="form-group">
+                  <label className="form-label">
+                    <FaUser className="label-icon" />
+                    Receiver ID
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="e.g., REC001"
+                    value={receiverId}
+                    onChange={(e) => setReceiverId(e.target.value)}
+                    required
+                  />
                 </div>
-                <div className="col-6">
-                  <h4 className="text-success mb-1">8</h4>
-                  <small className="text-muted">This Month</small>
+
+                <div className="form-group">
+                  <label className="form-label">
+                    <FaFileAlt className="label-icon" />
+                    Subject Name
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="e.g., Database Systems"
+                    value={subjectName}
+                    onChange={(e) => setSubjectName(e.target.value)}
+                    required
+                  />
                 </div>
               </div>
+
+              <div className="file-sets">
+                <div className="file-set">
+                  <div className="file-set-header primary">
+                    <h3>Set A</h3>
+                  </div>
+                  <div className="file-set-body">
+                    <label htmlFor="setA" className="file-upload-box">
+                      <input
+                        id="setA"
+                        type="file"
+                        name="setA"
+                        onChange={handleFileChange}
+                        accept=".pdf,.doc,.docx"
+                        hidden
+                      />
+                      <FaUpload className="upload-icon" />
+                      <p>Click to upload or drag & drop</p>
+                      <span className="file-hint">PDF, DOC, DOCX up to 10MB</span>
+                      {files.setA && (
+                        <div className="file-selected">
+                          <FaCheckCircle />
+                          {files.setA.name}
+                        </div>
+                      )}
+                    </label>
+                  </div>
+                </div>
+
+                <div className="file-set">
+                  <div className="file-set-header success">
+                    <h3>Set B</h3>
+                  </div>
+                  <div className="file-set-body">
+                    <label htmlFor="setB" className="file-upload-box">
+                      <input
+                        id="setB"
+                        type="file"
+                        name="setB"
+                        onChange={handleFileChange}
+                        accept=".pdf,.doc,.docx"
+                        hidden
+                      />
+                      <FaUpload className="upload-icon" />
+                      <p>Click to upload or drag & drop</p>
+                      <span className="file-hint">PDF, DOC, DOCX up to 10MB</span>
+                      {files.setB && (
+                        <div className="file-selected">
+                          <FaCheckCircle />
+                          {files.setB.name}
+                        </div>
+                      )}
+                    </label>
+                  </div>
+                </div>
+
+                <div className="file-set">
+                  <div className="file-set-header warning">
+                    <h3>Set C</h3>
+                  </div>
+                  <div className="file-set-body">
+                    <label htmlFor="setC" className="file-upload-box">
+                      <input
+                        id="setC"
+                        type="file"
+                        name="setC"
+                        onChange={handleFileChange}
+                        accept=".pdf,.doc,.docx"
+                        hidden
+                      />
+                      <FaUpload className="upload-icon" />
+                      <p>Click to upload or drag & drop</p>
+                      <span className="file-hint">PDF, DOC, DOCX up to 10MB</span>
+                      {files.setC && (
+                        <div className="file-selected">
+                          <FaCheckCircle />
+                          {files.setC.name}
+                        </div>
+                      )}
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              {uploadMessage && (
+                <div className={`form-alert ${uploadMessage.includes('Success') ? 'success' : 'error'}`}>
+                  {uploadMessage}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                className="btn-primary"
+                disabled={isUploading || !files.setA}
+                style={{ width: '100%', marginTop: '1.5rem' }}
+              >
+                {isUploading ? (
+                  <>
+                    <span className="spinner" />
+                    Uploading...
+                  </>
+                ) : (
+                  <>
+                    <FaUpload />
+                    Upload Papers
+                  </>
+                )}
+              </button>
+            </form>
+          </div>
+
+          <div className="distributor-guidelines fade-in-up fade-in-up-2">
+            <div className="guidelines-card">
+              <h3 className="guidelines-title">
+                <FaInfoCircle /> Upload Guidelines
+              </h3>
+              <ol className="guidelines-list">
+                <li>Enter the receiver's ID accurately</li>
+                <li>Select the subject being uploaded</li>
+                <li>Upload exam papers for Sets A, B, and C</li>
+                <li>Ensure files are in PDF, DOC, or DOCX format</li>
+                <li>Maximum file size: 10MB per file</li>
+              </ol>
             </div>
           </div>
         </div>

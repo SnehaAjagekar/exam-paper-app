@@ -16,6 +16,7 @@ describe('Secure Exam App Login Test', function () {
     it('should login successfully', async function () {
 
         await driver.wait(until.elementLocated(By.name('username')), 10000);
+        //Wrong Password and username
         await driver.findElement(By.name('username')).sendKeys('dis2');
         await driver.findElement(By.name('password')).sendKeys('dis2');
         await driver.findElement(By.tagName('button')).click();

@@ -1,216 +1,140 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import DashboardLayout from './layout/DashboardLayout';
+import { FaLock, FaUserShield, FaCogs, FaGraduationCap, FaPhone, FaEnvelope, FaAward } from 'react-icons/fa';
+import '../styles/pages.css';
 
 const AboutPage = () => {
-  return (
-    <div style={styles.container}>
-      {/* Hero Section */}
-      <div style={styles.hero}>
-        <h1 style={styles.heroTitle}>About Our Exam Portal</h1>
-        <p style={styles.heroSubtitle}>
-          A secure platform for managing and distributing examination materials
-        </p>
-      </div>
+  const navigate = useNavigate();
 
-      {/* Mission Section */}
-      <div style={styles.section}>
-        <h2 style={styles.sectionTitle}>Our Mission</h2>
-        <p style={styles.sectionText}>
-          We aim to revolutionize exam management by providing educational institutions with a secure, 
-          efficient, and user-friendly platform for handling examination materials. Our solution 
-          reduces administrative overhead while maintaining the highest security standards.
-        </p>
-      </div>
-
-      {/* Features Section */}
-      <div style={{...styles.section, backgroundColor: '#f8f1e9'}}>
-        <h2 style={styles.sectionTitle}>Key Features</h2>
-        <div style={styles.featuresContainer}>
-          <div style={styles.featureCard}>
-            <h3 style={styles.featureTitle}>Secure Exam Uploads</h3>
-            <p style={styles.featureText}>
-              Our system ensures secure and authenticated exam paper submissions with end-to-end encryption.
-            </p>
-          </div>
-          <div style={styles.featureCard}>
-            <h3 style={styles.featureTitle}>Role-Based Access</h3>
-            <p style={styles.featureText}>
-              Different access levels for administrators, teachers, and students to maintain data integrity.
-            </p>
-          </div>
-          <div style={styles.featureCard}>
-            <h3 style={styles.featureTitle}>Easy Management</h3>
-            <p style={styles.featureText}>
-              Intuitive interface for managing and organizing exam papers efficiently.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Team Section */}
-      <div style={styles.section}>
-        <h2 style={styles.sectionTitle}>Our Team</h2>
-        <div style={styles.teamContainer}>
-          <div style={styles.teamMember}>
-            <div style={styles.teamMemberAvatar}>S</div>
-            <h3 style={styles.teamMemberName}>Sneha Ajagekar</h3>
-            <p style={styles.teamMemberRole}>Lead Developer</p>
-            <p style={styles.teamMemberBio}>
-              Student
-            </p>
-          </div>
-          <div style={styles.teamMember}>
-            <div style={styles.teamMemberAvatar}>M</div>
-            <h3 style={styles.teamMemberName}>Madhura Patil</h3>
-            <p style={styles.teamMemberRole}>UI/UX Designer</p>
-            <p style={styles.teamMemberBio}>
-              Student
-            </p>
-          </div>
-          <div style={styles.teamMember}>
-            <div style={styles.teamMemberAvatar}>v</div>
-            <h3 style={styles.teamMemberName}>Vaishnavi PAtil</h3>
-            <p style={styles.teamMemberRole}>Project Manager</p>
-            <p style={styles.teamMemberBio}>
-              Student
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Contact Section */}
-      <div style={{...styles.section, backgroundColor: '#6d4c41', color: 'white'}}>
-        <h2 style={styles.sectionTitle}>Have Questions?</h2>
-        <p style={styles.sectionText}>
-          We're here to help! Contact our support team for any inquiries.
-        </p>
-        <p style={{...styles.sectionText, fontWeight: 'bold'}}>
-          contact@examportal.com | +1 (555) 123-4567
-        </p>
-      </div>
-    </div>
-  );
-};
-
-// Brownish Theme Styles
-const styles = {
-  container: {
-    fontFamily: '"Georgia", serif',
-    lineHeight: '1.6',
-    color: '#5d4037',
-    backgroundColor: '#fffdfa'
-  },
-  hero: {
-    backgroundColor: '#8d6e63',
-    color: '#fff8e1',
-    padding: '4rem 1rem',
-    textAlign: 'center',
-    marginBottom: '2rem',
-    background: 'linear-gradient(to right, #6d4c41, #8d6e63)'
-  },
-  heroTitle: {
-    fontSize: '2.5rem',
-    marginBottom: '1rem',
-    textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
-  },
-  heroSubtitle: {
-    fontSize: '1.25rem',
-    margin: '0 auto',
-    maxWidth: '800px',
-    opacity: 0.9
-  },
-  section: {
-    padding: '3rem 1rem',
-    maxWidth: '1200px',
-    margin: '0 auto',
-  },
-  sectionTitle: {
-    textAlign: 'center',
-    fontSize: '2rem',
-    marginBottom: '2rem',
-    color: '#5d4037'
-  },
-  sectionText: {
-    maxWidth: '800px',
-    margin: '0 auto 1rem',
-    textAlign: 'center',
-    color: '#5d4037'
-  },
-  featuresContainer: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    gap: '2rem',
-    marginTop: '2rem',
-  },
-  featureCard: {
-    flex: '1',
-    minWidth: '250px',
-    maxWidth: '350px',
-    backgroundColor: '#fff',
-    padding: '1.5rem',
-    borderRadius: '8px',
-    boxShadow: '0 2px 8px rgba(93,64,55,0.1)',
-    border: '1px solid #d7ccc8',
-    transition: 'transform 0.3s, box-shadow 0.3s',
-    ':hover': {
-      transform: 'translateY(-5px)',
-      boxShadow: '0 5px 15px rgba(93,64,55,0.2)'
+  const features = [
+    {
+      icon: <FaLock />,
+      title: 'Secure Exam Uploads',
+      description: 'End-to-end encryption ensures exam papers are protected with military-grade security standards.'
+    },
+    {
+      icon: <FaUserShield />,
+      title: 'Role-Based Access',
+      description: 'Granular permission levels for administrators, distributors, and receivers.'
+    },
+    {
+      icon: <FaCogs />,
+      title: 'Easy Management',
+      description: 'Intuitive interface for handling exam papers and managing distributions effortlessly.'
+    },
+    {
+      icon: <FaAward />,
+      title: 'Audit Trail',
+      description: 'Complete logging of all actions for compliance and accountability.'
     }
-  },
-  featureTitle: {
-    color: '#6d4c41',
-    marginBottom: '1rem',
-    borderBottom: '2px solid #d7ccc8',
-    paddingBottom: '0.5rem'
-  },
-  featureText: {
-    margin: 0,
-    color: '#5d4037'
-  },
-  teamContainer: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    gap: '2rem',
-    marginTop: '2rem',
-  },
-  teamMember: {
-    flex: '1',
-    minWidth: '250px',
-    maxWidth: '300px',
-    textAlign: 'center',
-    padding: '1.5rem',
-    backgroundColor: '#fff',
-    borderRadius: '8px',
-    boxShadow: '0 2px 8px rgba(93,64,55,0.1)',
-    border: '1px solid #d7ccc8'
-  },
-  teamMemberAvatar: {
-    width: '100px',
-    height: '100px',
-    borderRadius: '50%',
-    backgroundColor: '#8d6e63',
-    color: '#fff8e1',
-    fontSize: '3rem',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    margin: '0 auto 1rem',
-    fontWeight: 'bold'
-  },
-  teamMemberName: {
-    margin: '0.5rem 0',
-    color: '#5d4037'
-  },
-  teamMemberRole: {
-    color: '#8d6e63',
-    margin: '0.5rem 0',
-    fontStyle: 'italic'
-  },
-  teamMemberBio: {
-    margin: '0.5rem 0',
-    color: '#5d4037'
-  },
+  ];
+
+  const team = [
+    {
+      name: 'Sneha Ajagekar',
+      role: 'Lead Developer',
+      initials: 'SA',
+      bio: 'Full-stack engineer passionate about secure education technology'
+    }
+  ];
+
+  return (
+    <DashboardLayout>
+      <div className="about-page">
+        {/* Header Section */}
+        <div className="about-header fade-in-up">
+          <div className="about-header-content">
+            <h1>About SecureExam Portal</h1>
+            <p>Revolutionizing exam management through secure, efficient digital solutions</p>
+          </div>
+        </div>
+
+        {/* Mission Section */}
+        <section className="about-section fade-in-up fade-in-up-1">
+          <div className="section-container">
+            <h2 className="section-title">Our Mission</h2>
+            <p className="section-description">
+              We empower educational institutions with a secure, intuitive platform for managing examination materials. 
+              SecureExam Portal reduces administrative overhead while maintaining the highest security standards, 
+              ensuring every exam paper reaches the right hands at the right time.
+            </p>
+          </div>
+        </section>
+
+        {/* Features Section */}
+        <section className="about-section features-section fade-in-up fade-in-up-2">
+          <div className="section-container">
+            <h2 className="section-title">Key Features</h2>
+            <div className="features-grid">
+              {features.map((feature, index) => (
+                <div key={index} className={`feature-card fade-in-up fade-in-up-${index + 3}`}>
+                  <div className="feature-icon">
+                    {feature.icon}
+                  </div>
+                  <h3>{feature.title}</h3>
+                  <p>{feature.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Team Section */}
+        <section className="about-section team-section fade-in-up fade-in-up-3">
+          <div className="section-container">
+            <h2 className="section-title">Meet the Team</h2>
+            <div className="team-grid">
+              {team.map((member, index) => (
+                <div key={index} className="team-member">
+                  <div className="team-member-avatar">{member.initials}</div>
+                  <h3>{member.name}</h3>
+                  <p className="member-role">{member.role}</p>
+                  <p className="member-bio">{member.bio}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Contact Section */}
+        <section className="about-section contact-section fade-in-up fade-in-up-4">
+          <div className="section-container">
+            <h2 className="section-title">Get in Touch</h2>
+            <p className="section-description">
+              Have questions about SecureExam Portal? We're here to help!
+            </p>
+            <div className="contact-info">
+              <div className="contact-item">
+                <FaEnvelope className="contact-icon" />
+                <a href="mailto:contact@secureexam.com">contact@secureexam.com</a>
+              </div>
+              <div className="contact-item">
+                <FaPhone className="contact-icon" />
+                <a href="tel:+919876543210">+91 9876543210</a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="about-section cta-section fade-in-up fade-in-up-5">
+          <div className="section-container">
+            <h2>Ready to Get Started?</h2>
+            <p>Join educational institutions using SecureExam Portal for secure exam management.</p>
+            <div className="cta-buttons">
+              <button className="btn-primary" onClick={() => navigate('/dashboard')}>
+                Go to Dashboard
+              </button>
+              <button className="btn-secondary" onClick={() => navigate('/')}>
+                Back to Home
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </DashboardLayout>
+  );
 };
 
 export default AboutPage;

@@ -1,0 +1,76 @@
+/* ============================================================================
+   APP CSS - IMPORTS ALL DESIGN SYSTEM STYLESHEETS
+   ============================================================================ */
+
+/* Design System */
+@import './design-system.css';
+@import './styles/main-page.css';
+
+/* Page-Specific Styles */
+@import './styles/home.css';
+@import './styles/auth.css';
+@import './styles/login-as-page.css';
+@import './styles/dashboard.css';
+@import './styles/distributor.css';
+@import './styles/pages.css';
+
+/* Layout Component Styles (imported in components) */
+/* - Sidebar: components/styles/sidebar.css */
+/* - Header: components/styles/header.css */
+/* - DashboardLayout: components/styles/dashboard-layout.css */
+
+/* Global fixes for Bootstrap overrides */
+body {
+  background-color: var(--color-bg-primary) !important;
+  color: var(--color-text-primary);
+}
+
+.container-fluid {
+  max-width: 100%;
+  padding: 0;
+}
+
+/* Utility classes for Bootstrap compatibility */
+.me-1 {
+  margin-right: 0.25rem !important;
+}
+
+.me-2 {
+  margin-right: 0.5rem !important;
+}
+
+.me-3 {
+  margin-right: 1rem !important;
+}
+
+.ms-2 {
+  margin-left: 0.5rem !important;
+}
+
+.ms-auto {
+  margin-left: auto !important;
+}
+
+.d-none {
+  display: none !important;
+}
+
+.d-block {
+  display: block !important;
+}
+
+.d-flex {
+  display: flex !important;
+}
+
+.d-lg-none {
+  @media (min-width: 992px) {
+    display: none !important;
+  }
+}
+
+.d-md-none {
+  @media (min-width: 768px) {
+    display: none !important;
+  }
+}

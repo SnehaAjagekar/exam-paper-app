@@ -1,0 +1,253 @@
+/* ============================================================================
+   LOGIN AS PAGE (ROLE SELECTION) STYLES
+   ============================================================================ */
+
+.login-as-container {
+  min-height: 100vh;
+  background-color: var(--color-bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.login-as-content {
+  max-width: 900px;
+  width: 100%;
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.login-as-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.login-as-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 2.5rem);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.01em;
+}
+
+.login-as-subtitle {
+  font-size: 16px;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* Role Cards Grid */
+
+.login-as-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.role-card {
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  border-left: 3px solid var(--color-accent-primary);
+  padding: 2rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: var(--shadow-card);
+  position: relative;
+  overflow: hidden;
+}
+
+.role-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(74, 144, 217, 0.1) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.role-card:hover {
+  border-color: var(--color-accent-primary);
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+}
+
+.role-card:hover::before {
+  opacity: 1;
+}
+
+.role-card-content {
+  position: relative;
+  z-index: 1;
+}
+
+.role-card.distributor-card {
+  border-left-color: var(--color-accent-primary);
+}
+
+.role-card.receiver-card {
+  border-left-color: var(--color-accent-success);
+}
+
+.role-card.receiver-card:hover {
+  border-color: var(--color-accent-success);
+}
+
+.role-card.receiver-card .role-action {
+  color: var(--color-accent-success);
+}
+
+/* Role Icon */
+
+.role-icon {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(74, 144, 217, 0.15);
+  border-radius: 12px;
+  color: var(--color-accent-primary);
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.role-card:hover .role-icon {
+  background-color: rgba(74, 144, 217, 0.25);
+  transform: scale(1.1);
+}
+
+.role-card.receiver-card .role-icon {
+  background-color: rgba(45, 212, 160, 0.15);
+  color: var(--color-accent-success);
+}
+
+.role-card.receiver-card:hover .role-icon {
+  background-color: rgba(45, 212, 160, 0.25);
+}
+
+/* Role Title */
+
+.role-title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.01em;
+}
+
+/* Role Description */
+
+.role-description {
+  color: var(--color-text-secondary);
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+/* Features List */
+
+.role-features {
+  background-color: rgba(74, 144, 217, 0.05);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.feature {
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  padding: 0.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.feature:not(:last-child) {
+  border-bottom: 1px solid rgba(74, 144, 217, 0.1);
+  padding-bottom: 0.75rem;
+}
+
+/* Role Action Button */
+
+.role-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: var(--color-accent-primary);
+  font-weight: 600;
+  font-size: 15px;
+  padding: 0.75rem;
+  background-color: rgba(74, 144, 217, 0.1);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.role-card:hover .role-action {
+  background-color: rgba(74, 144, 217, 0.2);
+}
+
+.role-card.receiver-card .role-action {
+  color: var(--color-accent-success);
+}
+
+.role-card.receiver-card:hover .role-action {
+  background-color: rgba(45, 212, 160, 0.2);
+}
+
+/* Footer */
+
+.login-as-footer {
+  text-align: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.footer-text {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  margin: 0.75rem 0;
+}
+
+.footer-text a {
+  color: var(--color-accent-primary);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-text a:hover {
+  color: var(--color-accent-hover);
+}
+
+.back-link a {
+  color: var(--color-text-muted);
+}
+
+.back-link a:hover {
+  color: var(--color-accent-primary);
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .login-as-cards {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .login-as-header {
+    margin-bottom: 2rem;
+  }
+
+  .login-as-title {
+    font-size: 1.75rem;
+  }
+}

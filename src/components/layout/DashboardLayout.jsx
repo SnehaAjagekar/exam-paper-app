@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import { validateToken } from '../../utils/tokenValidation';
+import '../styles/dashboard-layout.css';
 
 const DashboardLayout = ({ children }) => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -11,7 +12,6 @@ const DashboardLayout = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Auto-collapse sidebar on mobile
     const handleResize = () => {
       const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
@@ -20,13 +20,12 @@ const DashboardLayout = ({ children }) => {
       }
     };
 
-    handleResize(); // Check on mount
+    handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   useEffect(() => {
-    // Check authentication
     const token = localStorage.getItem('access_token');
     const validatedUser = validateToken(token);
     
@@ -43,17 +42,17 @@ const DashboardLayout = ({ children }) => {
   };
 
   if (!user) {
-    return null; // or loading spinner
+    return <div className="loading-container">Loading...</div>;
   }
 
   return (
-    <div className="d-flex min-vh-100">
+    <div className="dashboard-layout">
       {/* Sidebar */}
       <Sidebar isCollapsed={isSidebarCollapsed} toggleSidebar={toggleSidebar} />
       
       {/* Main Content Area */}
       <div 
-        className="flex-grow-1 d-flex flex-column"
+        className={`main-content ${isSidebarCollapsed ? 'sidebar-collapsed' : ''}`}
         style={{ 
           marginLeft: isMobile ? '0' : (isSidebarCollapsed ? '80px' : '250px'),
           transition: 'margin-left 0.3s ease'
@@ -63,8 +62,8 @@ const DashboardLayout = ({ children }) => {
         <Header toggleSidebar={toggleSidebar} isCollapsed={isSidebarCollapsed} />
         
         {/* Page Content */}
-        <main className="flex-grow-1 p-3 p-md-4 bg-light">
-          <div className="container-fluid">
+        <main className="page-content">
+          <div className="content-wrapper">
             {children}
           </div>
         </main>

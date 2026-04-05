@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { validateToken } from "../utils/tokenValidation";
-import { FaUser, FaLock, FaSignInAlt, FaUserPlus } from "react-icons/fa";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { FaUser, FaLock, FaSignInAlt, FaArrowLeft } from "react-icons/fa";
+import "../styles/auth.css";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:5000";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -40,7 +42,7 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      const response = await axios.post("http://127.0.0.1:5000/login", {
+      const response = await axios.post(`${API_BASE_URL}/login`, {
         username,
         password,
       });
@@ -69,106 +71,88 @@ export default function Login() {
   };
 
   return (
-    <div className="min-vh-100 bg-light d-flex align-items-center py-5">
-      <div className="container">
-        <div className="row justify-content-center">
-          <div className="col-lg-6 col-xl-5">
-            <div className="card shadow-sm">
-              <div className="card-header bg-primary text-white text-center py-4">
-                <FaSignInAlt size={48} className="mb-3" />
-                <h2 className="mb-0" style={{ fontSize: "28px", fontWeight: "600" }}>
-                  Welcome Back
-                </h2>
-                <p className="mb-0 mt-2 opacity-75">
-                  Sign in as <span className="fw-bold">{role}</span>
-                </p>
-              </div>
+    <div className="auth-container">
+      <div className="auth-card">
+        <div className="auth-header">
+          <FaSignInAlt className="auth-header-icon" />
+          <h1 className="auth-title">Welcome Back</h1>
+          <p className="auth-subtitle">
+            Sign in as <span className="role-badge">{role}</span>
+          </p>
+        </div>
 
-              <div className="card-body p-5">
-                {message && (
-                  <div 
-                    className={`alert text-center ${
-                      message.includes('successful') ? 'alert-success' : 'alert-danger'
-                    }`} 
-                    role="alert"
-                  >
-                    {message}
-                  </div>
-                )}
-
-                <form onSubmit={handleSubmit}>
-                  <div className="mb-3">
-                    <label className="form-label">
-                      <FaUser className="me-2 text-primary" />
-                      Username
-                      <span className="text-danger"> *</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="username"
-                      className="form-control"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      required
-                      placeholder="Enter your username"
-                    />
-                  </div>
-
-                  <div className="mb-4">
-                    <label className="form-label">
-                      <FaLock className="me-2 text-primary" />
-                      Password
-                      <span className="text-danger"> *</span>
-                    </label>
-                    <input
-                      type="password"
-                      name="password"
-                      className="form-control"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      placeholder="Enter your password"
-                    />
-                  </div>
-
-                  <div className="d-grid">
-                    <button
-                      type="submit"
-                      className="btn btn-primary btn-lg"
-                      disabled={isLoading}
-                    >
-                      {isLoading ? (
-                        <>
-                          <span className="spinner-border spinner-border-sm me-2" role="status" />
-                          Signing In...
-                        </>
-                      ) : (
-                        <>
-                          <FaSignInAlt className="me-2" />
-                          Sign In
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </form>
-
-                <div className="text-center mt-4 pt-3 border-top">
-                  <p className="text-muted mb-2">
-                    Don't have an account?{" "}
-                    <a href="/register" className="text-decoration-none">
-                      <FaUserPlus className="me-1" />
-                      Create Account
-                    </a>
-                  </p>
-                  <p className="text-muted mb-0">
-                    <a href="/loginAs" className="text-decoration-none text-secondary">
-                      ← Back to Role Selection
-                    </a>
-                  </p>
-                </div>
-              </div>
+        <div className="auth-body">
+          {message && (
+            <div 
+              className={`auth-alert ${
+                message.includes('successful') ? 'alert-success' : 'alert-danger'
+              }`} 
+            >
+              {message}
             </div>
-          </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="auth-form">
+            <div className="form-group">
+              <label className="form-label">
+                <FaUser className="form-icon" />
+                Username
+              </label>
+              <input
+                type="text"
+                name="username"
+                className="form-control"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+                placeholder="Enter your username"
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">
+                <FaLock className="form-icon" />
+                Password
+              </label>
+              <input
+                type="password"
+                name="password"
+                className="form-control"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                placeholder="Enter your password"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="btn-primary auth-submit-btn"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <span className="spinner"></span>
+                  Signing In...
+                </>
+              ) : (
+                <>
+                  <FaSignInAlt className="me-2" />
+                  Sign In
+                </>
+              )}
+            </button>
+          </form>
+        </div>
+
+        <div className="auth-footer">
+          <p className="footer-text">
+            Don't have an account? <a href="/register">Create one</a>
+          </p>
+          <a href="/loginAs" className="back-link">
+            <FaArrowLeft size={14} className="me-1" />
+            Back to Role Selection
+          </a>
         </div>
       </div>
     </div>
