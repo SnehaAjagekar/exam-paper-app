@@ -6,7 +6,7 @@ import { validateToken } from '../utils/tokenValidation';
 import { FaUpload, FaFileAlt, FaUser, FaCheckCircle, FaInfoCircle } from 'react-icons/fa';
 import '../styles/distributor.css';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:5000";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://13.60.2.120:5000";
 
 const Distributer = () => {
   const [receiverId, setReceiverId] = useState('');
